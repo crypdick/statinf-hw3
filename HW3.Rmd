@@ -1,0 +1,173 @@
+---
+title: "Richard Decal - Homework 3"
+author: "Statistical Inference 1"
+date: "10/04/2017"
+output: pdf_document
+header-includes:
+- \usepackage{amsmath}
+- \usepackage{bm}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+library(ISLR)
+library(mosaic)
+library(pander)
+
+knitr::opts_chunk$set(tidy = TRUE, tidy.opts=list(width.cutoff = 60))
+panderOptions('table.split.table', Inf)
+
+```
+## Homework 3 Instructions
+
+Complete each of the following questions. If a question requires code, you must show your R code for full credit. When you are done, submit both your .Rmd and .pdf (or .docx or .html) files on Canvas. 
+
+- Most of the questions in this homework set are from either Introduction to Statistical Learning (ISLR) or our course text book (RPD). You might want to install the `ISLR` package.
+
+- Unless you are specifically told to do so, you may use R functions (e.g. lm) for all calculations. However, some problems specifically ask you to do calculations with matrices in order to confirm the results of R's functions.
+
+- When you are asked to "comment on your results" or "explain your reasoning", in general 1-2 sentences is sufficient unless you feel you need more detail to adequately answer the question. 
+
+## Question 1
+
+ISLR Chapter 3 Question 10 a-g: 
+
+Suppose we have a data set with five predictors, X1 = GPA, X2 = IQ, X3 = Gender (1 for Female and 0 for Male), X4 = Interaction between GPA and IQ, and X5 = Interaction between GPA and Gender. The response is starting salary after graduation (in thousands of dollars). Suppose we use least squares to fit the model, and get $\hat{\beta}_0 = 50, \hat{\beta}_1 = 20, \hat{\beta}_2 = 0.07, \hat{\beta}_3 = 35, \hat{\beta}_4 = 0.01, \hat{\beta}_5 = -10$.
+
+a. Which answer is correct, and why?
+- i. For a fixed value of IQ and GPA, males earn more on average than females.
+- ii. For a fixed value of IQ and GPA, females earn more on average than males.
+- iii. For a fixed value of IQ and GPA, males earn more on average than females provided that the GPA is high enough.
+- iv. For a fixed value of IQ and GPA, females earn more on average than males provided that the GPA is high enough.
+b.  Predict the salary of a female with IQ of 110 and a GPA of 4.0.
+c. True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect. Justify your answer.
+
+## Question 2
+
+ISLR Chapter 3 Question 10 a-g: This question should be answered using the `Carseats` data set.
+
+```{r}
+data(Carseats)
+```
+
++ (a) Fit a multiple regression model to predict Sales using Price, Urban, and US.
++ (b) Provide an interpretation of each coefficient in the model. Be careful— some of the variables in the model are qualitative!
++ (c) Write out the model in equation form, being careful to handle the qualitative variables properly.
++ (d) For which of the predictors can you reject the null hypothesis $H_0: \beta_j=0$?
++ (e) On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.
++ (f) How well do the models in (a) and (e) fit the data?
++ (g) Using the model from (e), obtain 95% confidence intervals for the coefficient(s).
+
+
+
+## Question 3
+
+ISLR Chapter 3 Question 15: This problem involves the Boston data set, which we saw in the lab for this chapter. We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.
+
++ (a) For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions.
++ (b) Fit a multiple regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis $H_0: \beta_j=0$?
++ (c) How do your results from (a) compare to your results from (b)? Create a plot displaying the univariate regression coefficients from (a) on the x-axis, and the multiple regression coefficients from (b) on the y-axis. That is, each predictor is displayed as a single point in the plot. Its coefficient in a simple linear regression model is shown on the x-axis, and its coefficient estimate in the multiple linear regression model is shown on the y-axis.
++ (d) Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form $Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \epsilon$. Compare this model fit to the linear models from part (a).
+
+## Question 4
+
+RPD 3.2:  For each of the following matrices, indicate whether there will be a
+unique solution to the normal equations. Show how you arrived at
+your answer.
+
+$$
+\begin{aligned}
+X_1 &= \left(\begin{array}{ccc} 
+1 & 2 & 4\\
+1 & 3 & 8\\
+1 & 0 & 6\\
+1 & -1 & 2
+\end{array}\right)\\
+X_2 &= \left(\begin{array}{ccc} 
+1 & 1 & 0\\
+1 & 1 & 0\\
+1 & 0 & 0\\
+1 & 0 & 1
+\end{array}\right)\\
+X_3 &= \left(\begin{array}{ccc} 
+1 & 2 & 4\\
+1 &1 & 2\\
+1 & -3 & -6\\
+1 & -1 & -2
+\end{array}\right)
+\end{aligned}
+$$ 
+
+
+
+## Question 5
+
+RPD 3.4: A data set with one independent variable and an intercept gave the following $(\mathbf{X^TX})^{-1}$:
+
+$$
+(\mathbf{X^TX})^{-1} = \left(\begin{array}{cc} 
+\frac{31}{177} & \frac{-3}{177}\\
+\frac{-3}{177} & \frac{6}{177}
+\end{array}\right)
+$$
+How many observations were there in the data set? Find $\sum X_i^2$ . Find the corrected sum of squares for the independent variable.
+
+## Question 6
+
+RPD 3.5: Use ONLY matrix calculations on this problem (not lm, etc.). The data in the accompanying table relate grams plant dry weight Y to percent soil organic matter X1, and kilograms of supplemental soil nitrogen added per 1,000 square meters X2:
+
+|      | Y             | X1            | X2    |
+|:----:| :-----------: |:-------------:| :----:|
+|      | 78.5          | 7             |   2.6 |
+|      | 74.3          | 1             |   2.9 |
+|      | 104.3         | 11            |   5.6 |
+|      | 87.6          | 11            |   3.1 |
+|      | 95.9          | 7             |   5.2 |
+|      | 109.2         | 11            |   5.5 |
+|      | 102.7         | 3             |   7.1 |
+|------|---------------|---------------|-------|
+|Sums: | 652.5         | 51            |    32 |
+|Means:| 93.21         | 7.29          |  4.57 |
+
++ (a) Define $\boldsymbol{Y}$, $\boldsymbol{X}$, $\boldsymbol{\beta}$, and $\boldsymbol{\epsilon}$ for a model involving both independent variables and an intercept.
++ (b) Compute $\boldsymbol{X^TX}$ and $\boldsymbol{X^TY}$.
++ (c) $(\boldsymbol{X^TX})^{-1}$ for this problem is
+
+```{r}
+xx_inv <- matrix(c(1.7995972, -.0685472, -.2531648,
+                   -.0685472,  .0100774,  .0010661, 
+                   -.2531648, -.0010661,  .0570789), byrow = TRUE, nrow = 3)
+pander(xx_inv)
+```
+
+(Ignore the rounding issues from `pander`: use the numbers in the original R code). Verify that this is the inverse of $\boldsymbol{X^TX}$. Compute $\boldsymbol{\beta}$ and write the regression equation. Interpret each estimated regression coeffi- cient. What are the units of measure attached to each regression coefficient?
+
++ (d) Compute $\boldsymbol{\hat{Y}}$  and $\boldsymbol{e}$.
++ (e) The $\boldsymbol{P}$ matrix in this case is a 7 × 7 matrix. Illustrate the computation of $\boldsymbol{P}$ by computing $v_{11}$, the first diagonal element, and $v_{12}$, the second element in the first row. Use the preceding results and these two elements of $\boldsymbol{P}$ to give the appropriate coefficient on $\sigma^2$ for each of the following variances.
+
++ (i) Var($\hat{\beta}_1$) 
++ (ii) Var($\hat{Y}_1$)
++ (iii) Var($\hat{Y}_{pred_1}$) 
++ (iv) Var($e_1$).
+
+
+## Question 7
+
+RPD 3.6:
+
+Use the data in Exercise 3.5. Center each independent variable by subtracting the column mean from each observation in the column. Compute $\boldsymbol{X^TX}$, $\boldsymbol{X^TY}$, and $\boldsymbol{X^TX}$ and $\boldsymbol{\hat{\beta}}$ using the centered data. Were the computations simplified by using centered data? Show that the regression equation obtained using centered data is equivalent to that obtained with the original uncentered data. Compute P using the centered data and compare it to that obtained using the uncentered data.
+
+# Optional extra problems
+
+These problems are not required and will not be graded. However, if you are looking for some extra practice, here are some problems I recommend:
+
+- ISLR Chapter 3 Question 1 
+- ISLR Chapter 3 Question 9, a-c
+- ISLR Chapter 3 Question 11
+- ISLR Chapter 3 Question 12
+- RPD Questions 3.13, 3.15, 3.16
+
