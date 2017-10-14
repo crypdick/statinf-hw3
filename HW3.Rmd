@@ -43,28 +43,60 @@ a. Which answer is correct, and why?
 - ii. For a fixed value of IQ and GPA, females earn more on average than males.
 - iii. For a fixed value of IQ and GPA, males earn more on average than females provided that the GPA is high enough.
 - iv. For a fixed value of IQ and GPA, females earn more on average than males provided that the GPA is high enough.
+
+ii, females earn more on average than males. If we fix the other two dimensions, we are taking a slice through our function. This cross-section looks like a function with one independent variable X3 and the response variable (salary). A positive slope of 35 would mean that higher inputs have higher outputs, so with this model we expect females to have higher predicted salaries. In addition, since the indicator variable for men is 0, when we multiply it by the beta_3 it nullifies that term, turning it into a step function.
+
 b.  Predict the salary of a female with IQ of 110 and a GPA of 4.0.
+```{r}
+(salary_b <- 50 + 20*4.0 + 0.07*111 + 1*35)
+```
 c. True or false: Since the coefficient for the GPA/IQ interaction term is very small, there is very little evidence of an interaction effect. Justify your answer.
+TODO
 
 ## Question 2
 
 ISLR Chapter 3 Question 10 a-g: This question should be answered using the `Carseats` data set.
 
 ```{r}
-data(Carseats)
+ data(Carseats)
 ```
 
 + (a) Fit a multiple regression model to predict Sales using Price, Urban, and US.
+```{r}
+lm.carseats <- lm(Sales~Price+Urban+US, data=Carseats)
+```
 + (b) Provide an interpretation of each coefficient in the model. Be careful— some of the variables in the model are qualitative!
+```{r}
+summary(lm.carseats)$coefficients
+```
+As price goes up, sales go down. Sales go up with being in the U.S., suggesting that U.S. shopers migtht be more consumerist. There is a very sligth negative trend in sales with urban locations, but it is not much.
+
 + (c) Write out the model in equation form, being careful to handle the qualitative variables properly.
+
+Sales = 13.04 - 0.05 * price - 0.02 * Urban + 1.2*US  # TODO: qual vars properly
+
 + (d) For which of the predictors can you reject the null hypothesis $H_0: \beta_j=0$?
-+ (e) On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome.
+
+
+With the exception of Urban, all coefficients have a non-zero coefficient and a p-value close to zero. However, Urban is the closest to zero and has a p-value of 0.9, which is much higher than our typical 0.05 threshold.
+
++ (e) On the basis of your response to the previous question, fit a smaller model that only uses the predictors for which there is evidence of association with the outcome
+
+```{r}
+lm.carseats2 <- lm(Sales~Price+US, data=Carseats)
+```
+
 + (f) How well do the models in (a) and (e) fit the data?
+
+```{r}
+summary(lm.carseats)
+summary(lm.carseats2)
+```
 + (g) Using the model from (e), obtain 95% confidence intervals for the coefficient(s).
 
 
 
-## Question 3
+## Question 3 OPTIONAL
 
 ISLR Chapter 3 Question 15: This problem involves the Boston data set, which we saw in the lab for this chapter. We will now try to predict per capita crime rate using the other variables in this data set. In other words, per capita crime rate is the response, and the other variables are the predictors.
 
@@ -101,7 +133,27 @@ X_3 &= \left(\begin{array}{ccc}
 \end{array}\right)
 \end{aligned}
 $$ 
+```{r}
+X_1 <- matrix(c(1,2,4,1,3,8,1,0,6,1,-1,2), nrow=4, byrow=TRUE)
+X_2 <- matrix(c(1,1,0,1,1,0,1,0,0,1,0,1), nrow=4, byrow=TRUE)
+X_3 <- matrix(c(1,2,4,1,1,2,1,-3,-6,1,-1,-2), nrow=4, byrow=TRUE)
+```
+If $X^TX$ has an inverse, then the normal equations have a unique solution. Another way of checking is to see if the determinant is zero, which would mean that the transformation maps to a space that has 0 volume. Since this transformation projects an infinite number of vectors into each location, the reverse of the transformation gives infinite solutions rather than a unique solution.
+```{r}
+X_1.crossprod <- t(X_1) %*% X_1
+(X_1.inverse <- solve(X_1.crossprod))
+(X_1.determinant <- det(X_1.inverse))
 
+X_2.crossprod <- t(X_2) %*% X_2
+(X_2.inverse <- solve(X_2.crossprod))
+(X_2.determinant <- det(X_2.inverse))
+
+X_3.crossprod <- t(X_3) %*% X_3
+# (X_3.inverse <- solve(X_3.crossprod))  # error: system is exactly singular: U[3,3] = 0
+# (X_3.determinant <- det(X_3.inverse))  # beware R lies here
+det(t(X_3) %*% X_3)
+```
+Based on the existence on the inverse of their crossproducts and a non-zero determinant, $X_1$ and $X_2$ have a unique solution to the normal equations. However, $X_3$ has neither, so it does not have a unique solution.
 
 
 ## Question 5
